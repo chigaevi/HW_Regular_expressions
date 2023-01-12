@@ -1,4 +1,3 @@
-from pprint import pprint
 import csv
 import re
 
@@ -32,14 +31,7 @@ def edit_phone_number():
         contacts_list[i][5] = new_number
         i += 1
 
-
-if __name__ == '__main__':
-    with open("phonebook_raw.csv") as f:
-        rows = csv.reader(f, delimiter=",")
-        contacts_list = list(rows)
-    distrib_name()
-    edit_phone_number()
-
+def join_records():
     i = 0
     count_staff = len(contacts_list)
     count_prop = len(contacts_list[0])
@@ -52,12 +44,26 @@ if __name__ == '__main__':
                 for ind2 in range(count_prop):
                     if contacts_list[ind][ind2] == '' or staff[ind2] == '':
                         contacts_list[i][ind2] = contacts_list[ind][ind2] + staff[ind2]
+                        contacts_list[ind][ind2] = contacts_list[i][ind2]
         i += 1
 
-    pprint(contacts_list)
+    new_contacts_list = []
+    for i in contacts_list:
+        if i in new_contacts_list:
+            continue
+        else:
+            new_contacts_list.append(i)
+    return new_contacts_list
 
 
-# with open("phonebook.csv", "w", encoding='cp1251') as f:
-#   datawriter = csv.writer(f, delimiter=',')
-#   # Вместо contacts_list подставьте свой список
-#   datawriter.writerows(contacts_list)
+if __name__ == '__main__':
+    with open("phonebook_raw.csv") as f:
+        rows = csv.reader(f, delimiter=",")
+        contacts_list = list(rows)
+    distrib_name()
+    edit_phone_number()
+    contacts_list = join_records()
+
+    with open("phonebook.csv", "w", encoding='cp1251') as f:
+      datawriter = csv.writer(f)
+      datawriter.writerows(contacts_list)
