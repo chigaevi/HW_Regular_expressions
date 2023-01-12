@@ -2,10 +2,7 @@ from pprint import pprint
 import csv
 import re
 
-with open("phonebook_raw.csv") as f:
-    rows = csv.reader(f, delimiter=",")
-    contacts_list = list(rows)
-# pprint(contacts_list)
+
 def distrib_name():
     i = 0
     for staff in contacts_list:
@@ -36,16 +33,29 @@ def edit_phone_number():
         i += 1
 
 
+if __name__ == '__main__':
+    with open("phonebook_raw.csv") as f:
+        rows = csv.reader(f, delimiter=",")
+        contacts_list = list(rows)
+    distrib_name()
+    edit_phone_number()
 
-distrib_name()
-edit_phone_number()
-pprint(contacts_list)
+    i = 0
+    count_staff = len(contacts_list)
+    count_prop = len(contacts_list[0])
+    for staff in contacts_list:
+        if i+1 == count_staff:
+            continue
+        lastname = staff[0]
+        for ind in range(i, count_staff):
+             if lastname == contacts_list[ind][0]:
+                for ind2 in range(count_prop):
+                    if contacts_list[ind][ind2] == '' or staff[ind2] == '':
+                        contacts_list[i][ind2] = contacts_list[ind][ind2] + staff[ind2]
+        i += 1
 
-# for staff in contacts_list:
+    pprint(contacts_list)
 
-
-# TODO 2: сохраните получившиеся данные в другой файл
-# код для записи файла в формате CSV
 
 # with open("phonebook.csv", "w", encoding='cp1251') as f:
 #   datawriter = csv.writer(f, delimiter=',')
